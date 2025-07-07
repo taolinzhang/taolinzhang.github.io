@@ -4,4 +4,16 @@
          <loc>https://linn.ac.cn/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
+    <url>
+         <loc>https://linn.ac.cn/LLM/</loc>
+         <lastmod>2025-07-07</lastmod>
+    </url>
+    <url>
+         <loc>https://linn.ac.cn/TTA/</loc>
+         <lastmod>2025-07-07</lastmod>
+    </url>
+    <url>
+         <loc>https://linn.ac.cn/VLM/</loc>
+         <lastmod>2025-07-07</lastmod>
+    </url>
 </urlset>
