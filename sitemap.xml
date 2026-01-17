@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:60557/about/</loc>
+    <loc>https://taolinzhang.github.io/about/</loc>
     <lastmod>2026-01-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:60557/</loc>
+    <loc>https://taolinzhang.github.io/</loc>
     <lastmod>2026-01-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:60557/canvas/</loc>
+    <loc>https://taolinzhang.github.io/canvas/</loc>
   </url><url>
-    <loc>http://localhost:60557/categories/</loc>
+    <loc>https://taolinzhang.github.io/categories/</loc>
   </url><url>
-    <loc>http://localhost:60557/tags/</loc>
+    <loc>https://taolinzhang.github.io/tags/</loc>
   </url>
 </urlset>
