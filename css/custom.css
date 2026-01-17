@@ -1,0 +1,73 @@
+
+/* Separator between posts */
+.section-li {
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-li:last-child {
+  border-bottom: none;
+}
+
+/* Post Summary */
+.post-summary {
+  color: var(--gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  /* Ensure it doesn't clash with tags */
+  width: 100%; 
+  
+  /* Truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Adjust section grid to allow summary to flow nicely */
+.section {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.section-header .meta {
+  font-family: var(--codeFont);
+  font-size: 0.85rem;
+  color: var(--gray);
+  min-width: fit-content;
+}
+
+.section-header .desc h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* Make tags smaller and less intrusive if needed */
+.section .tags {
+  margin: 0;
+}
+
+/* Explicit Homepage List Title Styling */
+.section-li .section .desc h3,
+.section-li .section .desc h3 a {
+  text-shadow: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  font-size: 1.5rem !important; /* Increased font size */
+  background: transparent !important; /* Ensure no background effects */
+}

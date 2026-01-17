@@ -1,0 +1,414 @@
+:root {
+    --bg-color: #f4f4f4;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --accent-color: #000;
+    --grid-color: #e0e0e0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden; /* Prevent native scroll */
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+}
+
+#app:active {
+    cursor: grabbing;
+}
+
+.canvas-container {
+    position: absolute;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+/* Grid Background */
+.grid-background {
+    position: absolute;
+    top: -5000px;
+    left: -5000px;
+    width: 10000px;
+    height: 10000px;
+    background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* UI Controls */
+.ui-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: #f0f0f0;
+}
+
+/* Cards */
+.card {
+    position: absolute;
+    width: 300px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 20px;
+    cursor: default;
+    transition: box-shadow 0.2s, transform 0.1s;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 10 !important;
+}
+
+.card-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 15px;
+    font-size: 0.9rem;
+    color: #555;
+    flex: 1; /* fills remaining space */
+    overflow: hidden; /* clip extra text */
+    text-overflow: ellipsis; /* nice to have but multiline needs webkit-box usually */
+    white-space: pre-wrap; /* preserve basic formatting */
+    mask-image: linear-gradient(180deg, #000 60%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+}
+
+.card-summary {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.card-meta {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: auto;
+}
+
+.card-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    cursor: move;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    width: 400px;
+    max-height: 80vh;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+#modal-search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.modal h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.post-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.post-item {
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.post-item:hover {
+    background: #f9f9f9;
+}
+
+.close-btn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Connection Layer */
+.connection-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 1; /* Below cards */
+}
+
+.connection-line {
+    stroke: #aaa;
+    stroke-width: 2px;
+    fill: none;
+    pointer-events: all; /* If we want to click to delete later */
+}
+
+.connection-arrowhead {
+    fill: #aaa;
+}
+
+
+/* Resize Handle */
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    cursor: nwse-resize;
+    z-index: 25;
+}
+
+.resize-handle::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 8px 8px;
+    border-color: transparent transparent #ccc transparent;
+}
+
+.card:hover .resize-handle::after {
+    border-color: transparent transparent #666 transparent;
+}
+
+/* Connection Ports */
+.connection-port {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border: 2px solid #666;
+    border-radius: 50%;
+    cursor: crosshair;
+    opacity: 0; 
+    transition: opacity 0.2s, background 0.2s, transform 0.2s;
+    z-index: 20;
+}
+
+
+.card:hover .connection-port {
+    opacity: 1;
+}
+
+.connection-port:hover {
+    background: #000;
+    transform: scale(1.2);
+}
+
+.port-top { top: -6px; left: 50%; transform: translateX(-50%); }
+.port-bottom { bottom: -6px; left: 50%; transform: translateX(-50%); }
+.port-left { left: -6px; top: 50%; transform: translateY(-50%); }
+.port-right { right: -6px; top: 50%; transform: translateY(-50%); }
+
+.card.connecting .connection-port {
+    opacity: 1;
+}
+
+/* Connection Line Hover */
+.connection-line:hover {
+    stroke: #666;
+    stroke-width: 4px;
+    cursor: pointer;
+}
+
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 1px solid #f0f0f0;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+.canvas-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.canvas-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #666;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.canvas-item:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.canvas-item.active {
+    background: #000;
+    color: #fff;
+}
+
+.canvas-item .delete-canvas-btn {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.canvas-item:hover .delete-canvas-btn {
+    opacity: 0.5;
+}
+
+.canvas-item:hover .delete-canvas-btn:hover {
+    opacity: 1;
+}
+
+
+/* Adjust Main App for Sidebar */
+#app {
+    margin-left: 250px; /* Offset for sidebar */
+    width: calc(100vw - 250px);
+}
+
+.ui-controls {
+    /* Center in the remaining space */
+    left: calc(50% + 125px); 
+}
+
+
+/* Context Menu */
+.context-menu {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 6px 0;
+    z-index: 2000;
+    min-width: 120px;
+}
+
+.context-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #cc0000; /* Destructive action style */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.context-menu-item:hover {
+    background: #fff0f0;
+}
+
+
